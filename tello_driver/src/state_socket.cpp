@@ -89,15 +89,6 @@ namespace tello_driver
         msg.agy = std::stof(fields["agy"]);
         msg.agz = std::stof(fields["agz"]);
 
-        // create IMU message
-        imu_msg.header.stamp = receive_time_;
-        imu_msg.header.frame_id = "tello_imu";
-
-        imu_msg.linear_acceleration.x = msg.agx/100;
-        imu_msg.linear_acceleration.y = msg.agy/100;
-        imu_msg.linear_acceleration.z = msg.agz/100;
-        
-
 
       } catch (std::exception e) {
         RCLCPP_ERROR(driver_->get_logger(), "Can't parse flight data");
