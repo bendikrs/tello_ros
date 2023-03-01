@@ -58,6 +58,7 @@ namespace tello_driver
     // Only send ROS messages if there are subscribers
     if (driver_->count_subscribers(driver_->flight_data_pub_->get_topic_name()) > 0) {
       tello_msgs::msg::FlightData msg;
+      sensor_msgs::msg::Imu imu_msg;
       msg.header.stamp = receive_time_;
       msg.raw = raw;
       msg.sdk = sdk_;
@@ -88,10 +89,13 @@ namespace tello_driver
         msg.agy = std::stof(fields["agy"]);
         msg.agz = std::stof(fields["agz"]);
 
+
       } catch (std::exception e) {
         RCLCPP_ERROR(driver_->get_logger(), "Can't parse flight data");
         return;
       }
+
+
 
       driver_->flight_data_pub_->publish(msg);
     }
