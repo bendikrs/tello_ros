@@ -50,7 +50,6 @@ namespace tello_driver
     rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_pub_;
     rclcpp::Publisher<sensor_msgs::msg::CameraInfo>::SharedPtr camera_info_pub_;
     rclcpp::Publisher<tello_msgs::msg::FlightData>::SharedPtr flight_data_pub_;
-    rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr imu_pub_;
     rclcpp::Publisher<tello_msgs::msg::TelloResponse>::SharedPtr tello_response_pub_;
 
   private:
