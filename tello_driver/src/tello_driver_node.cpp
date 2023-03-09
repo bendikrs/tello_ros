@@ -43,8 +43,10 @@ namespace tello_driver
   TelloDriverNode::TelloDriverNode(const rclcpp::NodeOptions &options) :
     Node("tello_driver", options)
   {
+    // QoS profile for sensor data
+    rclcpp::SensorDataQoS sensor_qos{};
     // ROS publishers
-    image_pub_ = create_publisher<sensor_msgs::msg::Image>("image_raw", 10);
+    image_pub_ = create_publisher<sensor_msgs::msg::Image>("image_raw", sensor_qos);
     camera_info_pub_ = create_publisher<sensor_msgs::msg::CameraInfo>("camera_info", rclcpp::SensorDataQoS());
     flight_data_pub_ = create_publisher<tello_msgs::msg::FlightData>("flight_data", 1);
     tello_response_pub_ = create_publisher<tello_msgs::msg::TelloResponse>("tello_response", 1);
