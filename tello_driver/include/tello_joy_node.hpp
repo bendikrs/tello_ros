@@ -29,10 +29,14 @@ namespace tello_joy
   private:
 
     void joy_callback(const sensor_msgs::msg::Joy::SharedPtr joy_msg);
+    void tello_controller_callback(const geometry_msgs::msg::Twist::SharedPtr control_msg);
 
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_sub_;
     rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
     rclcpp::Client<tello_msgs::srv::TelloAction>::SharedPtr tello_client_;
+    rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_sub_;
+
+    geometry_msgs::msg::Twist control_msg_;
 
     // XBox One assignments
     const int joy_axis_throttle_ = JOY_AXIS_RIGHT_FB;

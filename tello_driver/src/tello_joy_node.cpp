@@ -16,6 +16,7 @@ namespace tello_joy
     joy_sub_ = create_subscription<sensor_msgs::msg::Joy>("joy", 1, std::bind(&TelloJoyNode::joy_callback, this, _1));
     cmd_vel_pub_ = create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 1);
     tello_client_ = create_client<tello_msgs::srv::TelloAction>("tello_action");
+    cmd_vel_sub_ = create_subscription<geometry_msgs::msg::Twist>("tello/controller/cmd_vel", 1, std::bind(&TelloJoyNode::tello_controller_callback, this, _1));
 
     (void) joy_sub_;
   }
@@ -36,13 +37,19 @@ namespace tello_joy
       tello_client_->async_send_request(request);
     } else {
       geometry_msgs::msg::Twist twist_msg;
-      twist_msg.linear.x = joy_msg->axes[joy_axis_throttle_];
-      twist_msg.linear.y = joy_msg->axes[joy_axis_strafe_];
-      twist_msg.linear.z = joy_msg->axes[joy_axis_vertical_];
-      twist_msg.angular.z = joy_msg->axes[joy_axis_yaw_];
+      twist_msg.linear.x = joy_msg->axes[joy_axis_throttle_] + control_msg_.linear.x;
+      twist_msg.linear.y = joy_msg->axes[joy_axis_strafe_] + control_msg_.linear.y;
+      twist_msg.linear.z = joy_msg->axes[joy_axis_vertical_] + control_msg_.linear.z;
+      twist_msg.angular.z = joy_msg->axes[joy_axis_yaw_] + control_msg_.angular.z;
       cmd_vel_pub_->publish(twist_msg);
     }
   }
+
+  void TelloJoyNode::tello_controller_callback(const geometry_msgs::msg::Twist::SharedPtr msg)
+  {
+    control_msg_ = *msg;
+  }
+
 
 } // namespace tello_joy
 
