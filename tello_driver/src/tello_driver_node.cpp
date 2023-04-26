@@ -109,14 +109,26 @@ namespace tello_driver
   void TelloDriverNode::cmd_vel_callback(const geometry_msgs::msg::Twist::SharedPtr msg)
   {
     // TODO cmd_vel should specify velocity, not joystick position
+    // if (!command_socket_->waiting()) {
+    //   std::ostringstream rc;
+    //   rc << "rc " << static_cast<int>(round(msg->linear.y * -100))
+    //      << " " << static_cast<int>(round(msg->linear.x * 100))
+    //      << " " << static_cast<int>(round(msg->linear.z * 100))
+    //      << " " << static_cast<int>(round(msg->angular.z * -100));
+    //   command_socket_->initiate_command(rc.str(), false);
+    // }
     if (!command_socket_->waiting()) {
-      std::ostringstream rc;
-      rc << "rc " << static_cast<int>(round(msg->linear.y * -100))
-         << " " << static_cast<int>(round(msg->linear.x * 100))
-         << " " << static_cast<int>(round(msg->linear.z * 100))
-         << " " << static_cast<int>(round(msg->angular.z * -100));
-      command_socket_->initiate_command(rc.str(), false);
-    }
+    double linear_y = std::min(1.0, std::max(-1.0, msg->linear.y));
+    double linear_x = std::min(1.0, std::max(-1.0, msg->linear.x));
+    double linear_z = std::min(1.0, std::max(-1.0, msg->linear.z));
+    double angular_z = std::min(1.0, std::max(-1.0, msg->angular.z));
+    std::ostringstream rc;
+    rc << "rc " << static_cast<int>(round(linear_y * -100))
+        << " " << static_cast<int>(round(linear_x * 100))
+        << " " << static_cast<int>(round(linear_z * 100))
+        << " " << static_cast<int>(round(angular_z * -100));
+    command_socket_->initiate_command(rc.str(), false);
+}
   }
 
   // Do work every second

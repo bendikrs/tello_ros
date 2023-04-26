@@ -37,8 +37,8 @@ namespace tello_joy
       tello_client_->async_send_request(request);
     } else {
       geometry_msgs::msg::Twist twist_msg;
-      twist_msg.linear.x = joy_msg->axes[joy_axis_throttle_] + control_msg_.linear.x;
-      twist_msg.linear.y = joy_msg->axes[joy_axis_strafe_] + control_msg_.linear.y;
+      twist_msg.linear.x = joy_msg->axes[joy_axis_throttle_] + control_msg_.linear.y;
+      twist_msg.linear.y = joy_msg->axes[joy_axis_strafe_] + control_msg_.linear.x;
       twist_msg.linear.z = joy_msg->axes[joy_axis_vertical_] + control_msg_.linear.z;
       twist_msg.angular.z = joy_msg->axes[joy_axis_yaw_] + control_msg_.angular.z;
       cmd_vel_pub_->publish(twist_msg);
