@@ -14,7 +14,7 @@ namespace tello_joy
     using std::placeholders::_1;
 
     joy_sub_ = create_subscription<sensor_msgs::msg::Joy>("joy", 1, std::bind(&TelloJoyNode::joy_callback, this, _1));
-    cmd_vel_pub_ = create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 1);
+    cmd_vel_pub_ = create_publisher<geometry_msgs::msg::Twist>("tello/driver/cmd_vel", 1);
     tello_client_ = create_client<tello_msgs::srv::TelloAction>("tello_action");
     cmd_vel_sub_ = create_subscription<geometry_msgs::msg::Twist>("tello/controller/cmd_vel", 1, std::bind(&TelloJoyNode::tello_controller_callback, this, _1));
 
